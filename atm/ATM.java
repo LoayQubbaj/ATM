@@ -1,31 +1,44 @@
-
 package atm;
-   import java.util.Scanner;
 
-/**
- *
- * @author mahmoud
- */
+import java.util.Scanner;
+
 public class ATM {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner (System.in);
-        Bank theBank = new Bank("bank masr");
-        User newUser = theBank.addUser("mahmoud", "abdelmaksoud", "1234");
-        Account newAccount = new Account ("savings" , newUser , theBank);
-        newUser.addAccount(newAccount);
-        theBank.addAccount(newAccount);
-        User curUser;
-        while (true){
-        curUser = ATM.menuPrompt(theBank ,sc );
-        
-        ATM.printUserMenu(curUser , sc);
-        }
-        
-        
-    }
-    
-    public static  User menuPrompt(Bank theBank , Scanner sc ){
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		Bank theBank = new Bank("bank masr");
+
+		System.out.println("Welcome to " + theBank.getName());
+
+		// Ask the user for their first name, last name, password, and PIN
+		System.out.print("Enter your first name: ");
+		String firstName = sc.nextLine();
+
+		System.out.print("Enter your last name: ");
+		String lastName = sc.nextLine();
+
+		System.out.print("Enter your password: ");
+		String password = sc.nextLine();
+
+		System.out.print("Enter your PIN: ");
+		String pin = sc.nextLine();
+
+		User newUser = theBank.addUser(firstName, lastName, password, pin);
+		Account newAccount = new Account("savings", newUser, theBank);
+		newUser.addAccount(newAccount);
+		theBank.addAccount(newAccount);
+
+		User curUser;
+		while (true) {
+			curUser = ATM.menuPrompt(theBank, sc);
+			ATM.printUserMenu(curUser, sc);
+		}
+	}
+
+
+
+	public static  User menuPrompt(Bank theBank , Scanner sc ){
         String userID ;
         String pin ; 
         User authUser;

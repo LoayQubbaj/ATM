@@ -69,19 +69,16 @@ public class Bank {
         return uuid ;
         
     }
-     
-     public User addUser(String firstName , String lastName , String pin){
-         User newUser = new User ( firstName ,  lastName ,  pin , this); 
-         this.users.add(newUser);
 
-         Account newAccount = new Account("savings" , newUser , this);
-         this.accounts.add(newAccount);
-         newUser.addAccount(newAccount);
-         return newUser;
-         
-         
-         
-     } 
+    public User addUser(String firstName, String lastName, String password, String pin) {
+        User newUser = new User(firstName, lastName, password, pin, this);
+        this.users.add(newUser);
+
+        Account newAccount = new Account("savings", newUser, this);
+        this.accounts.add(newAccount);
+        newUser.addAccount(newAccount);
+        return newUser;
+    }
      public User userLogin (String userID , String pin){
          for (User u :this.users){
              if (u.getUUID().compareTo(userID) ==0 &&u.validatePin(pin) ) 
