@@ -4,7 +4,39 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
+
 public class User {
+    private static final String AES_ALGORITHM = "AES";
+    private static final byte[] AES_KEY = {
+            0x74, 0x68, 0x69, 0x73, 0x2d, 0x69, 0x73, 0x2d,
+            0x61, 0x2d, 0x73, 0x74, 0x72, 0x6f, 0x6e, 0x67,
+            0x2d, 0x32, 0x35, 0x36, 0x2d, 0x62, 0x79, 0x74,
+            0x65, 0x73, 0x2d, 0x6b, 0x65, 0x79, 0x31, 0x32
+    }; // 32-byte AES key
+
+// Rest of the code remains the same
+// Change this to your own secret key
+
+    private String encrypt(String data) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        SecretKeySpec secretKey = new SecretKeySpec(AES_KEY, AES_ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes("UTF-8"));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+    private String decrypt(String encryptedData) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        SecretKeySpec secretKey = new SecretKeySpec(AES_KEY, AES_ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
+        return new String(decryptedBytes, "UTF-8");
+    }
+
+
     private String firstName;
     private String lastName;
     private String uuid;
@@ -13,8 +45,15 @@ public class User {
     private ArrayList<Account> accounts;
 
     public User(String firstName, String lastName, String password, String pin, Bank theBank) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        try {
+            this.firstName = encrypt(firstName);
+            this.lastName = encrypt(lastName);
+        } catch (Exception e) {
+            System.out.println("Error encrypting user data");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
 
         if (!isValidPassword(password)) {
             System.out.println("Error: Password does not meet complexity requirements.");
@@ -50,7 +89,7 @@ public class User {
         return false;
     }
 
-    // ... rest of the class
+
 
 
 
